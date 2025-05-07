@@ -12,12 +12,10 @@ class StoresService {
   private isLoading = false;
 
   async getStores(): Promise<Store[]> {
-    // Retornar do cache se já carregado
     if (this.stores.length > 0) {
       return this.stores;
     }
 
-    // Evitar múltiplas requisições simultâneas
     if (this.isLoading) {
       return new Promise((resolve) => {
         const checkInterval = setInterval(() => {
@@ -32,23 +30,23 @@ class StoresService {
     this.isLoading = true;
 
     try {
-      const response = await api.get('/stores');
+      // Tipagem explícita da resposta como Store[]
+      const response = await api.get<Store[]>('/stores');
       this.stores = response.data;
       return this.stores;
     } catch (error) {
       console.error('Erro ao buscar as lojas:', error);
-      // Dados de fallback caso a API falhe
       return [
-        { storeID: "1", storeName: "Steam", isActive: 1},
-        { storeID: "2", storeName: "GamersGate", isActive: 1},
-        { storeID: "3", storeName: "GreenManGaming", isActive: 1},
-        { storeID: "7", storeName: "GOG", isActive: 1},
-        { storeID: "8", storeName: "Origin", isActive: 1},
-        { storeID: "11", storeName: "Humble Store", isActive: 1},
-        { storeID: "13", storeName: "Uplay", isActive: 1},
-        { storeID: "15", storeName: "Fanatical", isActive: 1},
-        { storeID: "21", storeName: "WinGameStore", isActive: 1},
-        { storeID: "24", storeName: "Epic Games", isActive: 1},
+        { storeID: "1", storeName: "Steam", isActive: 1 },
+        { storeID: "2", storeName: "GamersGate", isActive: 1 },
+        { storeID: "3", storeName: "GreenManGaming", isActive: 1 },
+        { storeID: "7", storeName: "GOG", isActive: 1 },
+        { storeID: "8", storeName: "Origin", isActive: 1 },
+        { storeID: "11", storeName: "Humble Store", isActive: 1 },
+        { storeID: "13", storeName: "Uplay", isActive: 1 },
+        { storeID: "15", storeName: "Fanatical", isActive: 1 },
+        { storeID: "21", storeName: "WinGameStore", isActive: 1 },
+        { storeID: "24", storeName: "Epic Games", isActive: 1 },
       ];
     } finally {
       this.isLoading = false;

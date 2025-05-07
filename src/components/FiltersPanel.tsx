@@ -27,7 +27,7 @@ export function FiltersPanel({ filters, onChange }: FiltersPanelProps) {
       try {
         setLoading(true);
         const storeData = await storesService.getStores();
-        setStores(storeData.filter(store => store.isActive === 1));
+        setStores((storeData as Store[]).filter(store => store.isActive === 1));
       } catch (error) {
         console.error('Erro ao carregar lojas:', error);
       } finally {
