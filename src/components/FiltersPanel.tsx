@@ -39,59 +39,63 @@ export function FiltersPanel({ filters, onChange }: FiltersPanelProps) {
   }, []);
 
   return (
-    <Card className="mb-6 p-4 sm:p-6 sm:max-w-300 bg-white shadow-lg rounded-lg border border-gray-200">
-      <div className="space-y-4 sm:space-y-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Filtros</h2>
+    <Card className="mb-4 p-3 bg-white shadow-lg rounded-lg border border-gray-200">
+      <div className="space-y-3">
+        <h2 className="text-lg font-bold text-gray-800">Filtros</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* Primeira seção: Título e Loja */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Busca por título */}
-          <div className="space-y-2">
-            <label className="text-xs sm:text-sm font-semibold text-gray-800">Buscar por título</label>
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-gray-800">Buscar por título</label>
             <Input
               placeholder="Digite o nome do jogo..."
               value={filters.searchTerm}
               onChange={(e) => onChange.onSearchChange(e.target.value)}
-              className="border-gray-300 focus:ring-2 focus:ring-[#8B5CF6] focus:border-[#8B5CF6] text-gray-900 placeholder-gray-400 text-sm sm:text-base"
+              className="border-gray-300 h-8 text-xs"
             />
           </div>
 
           {/* Filtro por loja */}
-          <div className="space-y-2">
-            <label className="text-xs sm:text-sm font-semibold text-gray-800">Loja</label>
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-gray-800">Loja</label>
             <Select 
               value={filters.storeID || 'all'} 
               onValueChange={(value) => onChange.onStoreChange(value === 'all' ? '' : value)}
               disabled={loading}
             >
-              <SelectTrigger className={`border-gray-300 m-auto text-gray-900 text-sm sm:text-base ${loading ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}`}>
+              <SelectTrigger className={`border-gray-300 h-8 m-auto text-xs ${loading ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}`}>
                 <SelectValue placeholder={loading ? "Carregando..." : "Todas as lojas"} />
               </SelectTrigger>
               <SelectContent className="bg-white border-gray-300">
-                <SelectItem value="all" className="text-gray-900 hover:bg-[#8B5CF6] hover:text-white text-sm sm:text-base">Todas as lojas</SelectItem>
+                <SelectItem value="all" className="text-xs">Todas as lojas</SelectItem>
                 {stores.map((store) => (
-                  <SelectItem key={store.storeID} value={store.storeID} className="text-gray-900 hover:bg-[#8B5CF6] hover:text-white text-sm sm:text-base">
+                  <SelectItem key={store.storeID} value={store.storeID} className="text-xs">
                     {store.storeName}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
+        </div>
 
+        {/* Segunda seção: Ordenação e Botão Reset */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Ordenação */}
-          <div className="space-y-2">
-            <label className="text-xs sm:text-sm font-semibold text-gray-800">Ordenar por</label>
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-gray-800">Ordenar por</label>
             <Select 
               value={filters.sortBy} 
               onValueChange={(value) => onChange.onSortChange(value as SortOption)}
             >
-              <SelectTrigger className="border-gray-300 m-auto text-gray-900 bg-white text-sm sm:text-base">
+              <SelectTrigger className="border-gray-300 m-auto h-8 text-xs">
                 <SelectValue placeholder="Ordenar por..." />
               </SelectTrigger>
               <SelectContent className="bg-white border-gray-300">
-                <SelectItem value="dealRating" className="text-gray-900 hover:bg-[#8B5CF6] hover:text-white text-sm sm:text-base">Melhor avaliação</SelectItem>
-                <SelectItem value="price" className="text-gray-900 hover:bg-[#8B5CF6] hover:text-white text-sm sm:text-base">Menor preço</SelectItem>
-                <SelectItem value="savings" className="text-gray-900 hover:bg-[#8B5CF6] hover:text-white text-sm sm:text-base">Maior desconto</SelectItem>
-                <SelectItem value="title" className="text-gray-900 hover:bg-[#8B5CF6] hover:text-white text-sm sm:text-base">Nome do jogo</SelectItem>
+                <SelectItem value="dealRating" className="text-xs">Melhor avaliação</SelectItem>
+                <SelectItem value="price" className="text-xs">Menor preço</SelectItem>
+                <SelectItem value="savings" className="text-xs">Maior desconto</SelectItem>
+                <SelectItem value="title" className="text-xs">Nome do jogo</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -101,7 +105,7 @@ export function FiltersPanel({ filters, onChange }: FiltersPanelProps) {
             <Button 
               onClick={onChange.onResetFilters} 
               variant="outline" 
-              className="w-full border-[#22C55E] text-[#22C55E] hover:bg-[#22C55E] hover:text-white text-sm sm:text-base"
+              className="w-full h-8 text-xs border-green-500 text-green-500 hover:bg-green-500 hover:text-white"
             >
               Limpar filtros
             </Button>
@@ -109,78 +113,41 @@ export function FiltersPanel({ filters, onChange }: FiltersPanelProps) {
         </div>
 
         {/* Sliders de preço e desconto */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 mt-4 sm:mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
           {/* Filtro de faixa de preço */}
-          <div className="space-y-2 sm:space-y-3">
+          <div className="space-y-2">
             <div className="flex justify-between">
-              <label className="text-xs sm:text-sm font-semibold text-gray-800">Faixa de preço</label>
-              <span className="text-xs sm:text-sm text-gray-600">${filters.lowerPrice} - ${filters.upperPrice}</span>
+              <label className="text-xs font-semibold text-gray-800">Faixa de preço</label>
+              <span className="text-xs text-gray-600">${filters.lowerPrice} - ${filters.upperPrice}</span>
             </div>
-            <Slider
-              min={0}
-              max={100}
-              step={1}
-              value={[filters.lowerPrice, filters.upperPrice]}
-              onValueChange={(value) => onChange.onPriceRangeChange(value as [number, number])}
-              className="w-full"
-            >
-              <div className="relative w-full h-2 sm:h-3 bg-gray-200 rounded-full">
-                <div
-                  className="absolute h-2 sm:h-3 bg-[#8B5CF6] rounded-full"
-                  style={{ width: `${((filters.upperPrice - filters.lowerPrice) / 100) * 100}%`, left: `${(filters.lowerPrice / 100) * 100}%` }}
-                />
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={filters.lowerPrice}
-                  onChange={(e) => onChange.onPriceRangeChange([parseInt(e.target.value), filters.upperPrice] as [number, number])}
-                  className="absolute w-full h-2 sm:h-3 bg-transparent appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]"
-                />
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={filters.upperPrice}
-                  onChange={(e) => onChange.onPriceRangeChange([filters.lowerPrice, parseInt(e.target.value)] as [number, number])}
-                  className="absolute w-full h-2 sm:h-3 bg-transparent appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]"
-                />
-              </div>
-            </Slider>
+            <div className="px-1">
+              <Slider
+                min={0}
+                max={100}
+                step={1}
+                value={[filters.lowerPrice, filters.upperPrice]}
+                onValueChange={(value) => onChange.onPriceRangeChange(value as [number, number])}
+                className="w-full"
+              />
+            </div>
           </div>
 
           {/* Filtro de desconto mínimo */}
-          <div className="space-y-2 sm:space-y-3">
+          <div className="space-y-2">
             <div className="flex justify-between">
-              <label className="text-xs sm:text-sm font-semibold text-gray-800">Desconto mínimo</label>
-              <span className="text-xs sm:text-sm text-gray-600">{filters.minDiscount}%</span>
+              <label className="text-xs font-semibold text-gray-800">Desconto mínimo</label>
+              <span className="text-xs text-gray-600">{filters.minDiscount}%</span>
             </div>
-            <Slider
-              min={0}
-              max={100}
-              step={5}
-              value={[filters.minDiscount]}
-              onValueChange={(value) => onChange.onDiscountChange(value[0])}
-              className="w-full"
-            >
-              <div className="relative w-full h-2 sm:h-3 bg-gray-200 rounded-full">
-                <div
-                  className="absolute h-2 sm:h-3 bg-[#F97316] rounded-full"
-                  style={{ width: `${(filters.minDiscount / 100) * 100}%` }}
-                />
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  step={5}
-                  value={filters.minDiscount}
-                  onChange={(e) => onChange.onDiscountChange(parseInt(e.target.value))}
-                  className="absolute w-full h-2 sm:h-3 bg-transparent appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#F97316]"
-                />
-              </div>
-            </Slider>
+            <div className="px-1">
+              <Slider
+                min={0}
+                max={100}
+                step={5}
+                value={[filters.minDiscount]}
+                onValueChange={(value) => onChange.onDiscountChange(value[0])}
+                className="w-full"
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -128,8 +128,8 @@ function App() {
 
   return (
     <div className="flex align-center justify-center min-h-screen bg-gray-800">
-      <div className="py-8">
-        <h1 className="text-3xl font-bold text-white mb-6 text-center">Ofertas de Jogos</h1>
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 max-w-screen-lg">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 text-center">Ofertas de Jogos</h1>
         
         {/* Painel de Filtros */}
         <FiltersPanel 
