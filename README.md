@@ -2,7 +2,7 @@
 
 Game Deals Dashboard é uma aplicação web desenvolvida com React e TypeScript que exibe uma lista interativa das melhores ofertas de jogos em lojas digitais. A proposta é oferecer aos usuários uma maneira fácil e intuitiva de encontrar jogos com grandes descontos, com diversos filtros, ordenações e uma interface responsiva.
 
-![Preview da aplicação](https://avaliacao-leader.vercel.app/)
+[Preview da aplicação](https://avaliacao-leader.vercel.app/)
 
 ---
 
