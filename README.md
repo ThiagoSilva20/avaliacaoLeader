@@ -2,19 +2,17 @@
 
 Game Deals Dashboard é uma aplicação web desenvolvida com React e TypeScript que exibe uma lista interativa das melhores ofertas de jogos em lojas digitais. A proposta é oferecer aos usuários uma maneira fácil e intuitiva de encontrar jogos com grandes descontos, com diversos filtros, ordenações e uma interface responsiva.
 
-[Preview da aplicação](https://avaliacao-leader.vercel.app/)
-
 ---
 
 ## ✨ Funcionalidades
 
 * **Busca por nome do jogo:** filtragem em tempo real conforme o usuário digita.
-* **Filtro por loja:** selecione uma ou mais lojas para refinar os resultados.
+* **Filtro por loja:** selecione uma loja específica para refinar os resultados.
 * **Filtro por faixa de preço:** escolha um intervalo mínimo e máximo de valor.
 * **Filtro por desconto:** defina um percentual mínimo para exibir apenas grandes ofertas.
-* **Ordenação:** organize por título, menor preço, maior desconto ou nota da loja.
-* **Tabela responsiva:** design adaptado para dispositivos móveis e desktops.
-* **Modal de detalhes:** clique na oferta e veja mais informações.
+* **Ordenação:** organize por título, menor preço, maior desconto ou avaliação da oferta.
+* **Interface responsiva:** design adaptado para dispositivos móveis, tablets e desktops.
+* **Modal de detalhes:** clique na oferta para ver informações completas sobre o jogo.
 * **Consumo de dados da CheapShark API:** acesso a ofertas atualizadas em tempo real.
 * **Cache de lojas:** otimiza a performance evitando chamadas repetidas para nomes das lojas.
 
@@ -22,11 +20,13 @@ Game Deals Dashboard é uma aplicação web desenvolvida com React e TypeScript 
 
 ## 🚀 Tecnologias Utilizadas
 
-* **React**: Biblioteca para criação de interfaces reativas e declarativas.
-* **TypeScript**: Tipagem estática para melhor manutenção e segurança de código.
-* **Tailwind CSS**: Framework utilitário para estilização rápida e responsiva.
-* **Lucide React**: Biblioteca de ícones moderna e leve.
-* **CheapShark API**: Fonte de dados com informações atualizadas sobre promoções de jogos.
+* **React 19:** Biblioteca para criação de interfaces reativas e declarativas.
+* **TypeScript:** Tipagem estática para melhor manutenção e segurança de código.
+* **Tailwind CSS 4:** Framework utilitário para estilização rápida e responsiva.
+* **Shadcn/UI:** Componentes de interface reutilizáveis e estilizáveis.
+* **Lucide React:** Biblioteca de ícones moderna e leve.
+* **Axios:** Cliente HTTP para comunicação com a API.
+* **CheapShark API:** Fonte de dados com informações atualizadas sobre promoções de jogos.
 
 ---
 
@@ -35,10 +35,26 @@ Game Deals Dashboard é uma aplicação web desenvolvida com React e TypeScript 
 ```
 src/
 ├── api/               # Configuração do cliente Axios
-├── components/        # Componentes reutilizáveis (filtros, tabela, modal)
-├── services/          # Serviços de cache e consumo da API
-├── interfaces.ts      # Tipagens TypeScript
+│   └── api.ts         # Configuração do Axios para a CheapShark API
+├── assets/            # Arquivos estáticos
+│   └── react.svg      # Icon da página
+├── components/        # Componentes reutilizáveis
+│   ├── ui/            # Componentes de UI base (shadcn)
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── dialog.tsx
+│   │   ├── input.tsx
+│   │   ├── select.tsx
+│   │   ├── slider.tsx
+│   │   └── table.tsx
+│   ├── DealsTable.tsx # Tabela de ofertas
+│   ├── FiltersPanel.tsx # Painel de filtros
+│   └── lib/           # Utilitários compartilhados
+├── services/          # Serviços e lógica de negócios
+│   └── storesService.ts # Serviço para gerenciar lojas
 ├── App.tsx            # Componente principal
+├── index.css          # Estilos globais
+├── interfaces.ts      # Definições de tipos e interfaces
 └── main.tsx           # Ponto de entrada da aplicação
 ```
 
@@ -76,7 +92,7 @@ Abra `http://localhost:5173` no navegador.
 | Comando         | Ação                                   |
 | --------------- | -------------------------------------- |
 | `npm run dev`   | Inicia o servidor de desenvolvimento   |
-| `npm run build` | Cria o build otimizado para produção   |
+| `npm run build` | Compila TypeScript e cria o build para produção |
 | `npm run lint`  | Executa a análise de código com ESLint |
 
 ---
@@ -85,40 +101,52 @@ Abra `http://localhost:5173` no navegador.
 
 ### `DealsTable.tsx`
 
-* Renderiza a tabela responsiva de ofertas
-* Permite interações como abrir o modal ao clicar na linha
-* Usa memoização de nomes de lojas com fallback
+* Renderiza a tabela responsiva de ofertas com três layouts diferentes:
+  * Desktop: Tabela completa com todas as informações
+  * Tablet: Tabela simplificada com colunas essenciais
+  * Mobile: Cards individuais para melhor visualização
+* Implementa o modal de detalhes com Dialog do shadcn/ui
+* Utiliza o serviço de lojas para exibir nomes em vez de IDs
+* Possui tratamento para imagens ausentes com fallback
 
 ### `FiltersPanel.tsx`
 
-* Componente de filtros com input, select e sliders
-* Atualiza o estado dos filtros de forma reativa
-* Controlado por props vindas do componente pai
+* Componente de filtros com:
+  * Input para busca por título
+  * Select para filtro de lojas
+  * Slider para faixa de preço
+  * Slider para desconto mínimo
+  * Seletor de ordenação
+  * Botão para reset de filtros
+  * Gerencia estados e eventos através de props
+  * Consumo do StoresService para exibir a lista de lojas
 
 ### `storesService.ts`
 
-* Garante que a lista de lojas é carregada apenas uma vez
-* Usa uma Promise compartilhada para evitar concorrência
-* Aplica fallback com lojas fixas se a API falhar
+* Implementa padrão Singleton para garantir uma única instância
+* Utiliza cache para evitar múltiplas requisições à API
+* Fornece fallback de lojas caso a API esteja indisponível
+* Métodos para busca de nomes de lojas por ID
 
 ### `App.tsx`
 
-* Componente principal que gerencia todo o estado
-* Faz a busca dos dados da CheapShark
-* Aplica filtros e ordenação com `useMemo` e `useCallback`
+* Componente principal que coordena toda a aplicação
+* Gerencia o estado global dos dados e filtros
+* Implementa a lógica de filtragem e ordenação com useEffect
+* Coordena a comunicação entre componentes filhos
 
 ---
 
 ## 💬 FAQ
 
 **1. Por que os nomes das lojas demoram a carregar?**
-Para evitar chamadas desnecessárias, o sistema espera o carregamento completo da lista de lojas antes de associar os nomes aos `storeID`.
+O serviço de lojas implementa um sistema de cache inteligente. Na primeira vez que a aplicação é carregada, os nomes podem demorar um pouco, mas nas próximas chamadas serão instantâneos.
 
 **2. O que acontece se a CheapShark API falhar?**
-O sistema usa um fallback com nomes de lojas mais comuns, permitindo a renderização da tabela mesmo offline.
+Implementamos um sistema de fallback que mantém uma lista de lojas comuns. Além disso, a aplicação exibe mensagens de erro amigáveis e continua funcionando com os recursos disponíveis.
 
 **3. Como posso contribuir?**
-Abra uma issue, sugira melhorias ou envie pull requests diretamente para o repositório. Toda ajuda é bem-vinda!
+Você pode abrir issues para reportar bugs ou sugerir melhorias, ou enviar pull requests diretamente para o repositório.
 
 ---
 
@@ -127,15 +155,15 @@ Abra uma issue, sugira melhorias ou envie pull requests diretamente para o repos
 Feito com ❤️ por **Thiago Silva**
 
 * [LinkedIn](https://www.linkedin.com/in/thiago-da-silva-machado)
-* [Instagram](https://instagram.com/sillva_ty)
+* [GitHub](https://github.com/ThiagoSilva20)
 * [Portfólio](https://thiagosilva-alpha.vercel.app/)
 
 ---
 
 ## ✉️ Licença
 
-Distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais informações.
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais informações.
 
 ---
 
-> Este projeto foi criado como parte de um estudo de aplicações modernas com React + TypeScript + Tailwind, e visa demonstrar boas práticas de desenvolvimento frontend com consumo de APIs externas.
+> Este projeto foi desenvolvido para demonstrar boas práticas de desenvolvimento frontend com React, TypeScript e Tailwind CSS, focando em uma experiência de usuário fluida e responsiva para busca de promoções de jogos.
