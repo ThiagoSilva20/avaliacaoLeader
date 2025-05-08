@@ -39,8 +39,7 @@ src/
 ├── services/          # Serviços de cache e consumo da API
 ├── interfaces.ts      # Tipagens TypeScript
 ├── App.tsx            # Componente principal
-├── main.tsx           # Ponto de entrada da aplicação
-└── styles/            # Configurações do Tailwind e estilos globais
+└── main.tsx           # Ponto de entrada da aplicação
 ```
 
 ---
