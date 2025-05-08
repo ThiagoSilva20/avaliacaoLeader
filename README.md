@@ -118,8 +118,8 @@ Abra `http://localhost:5173` no navegador.
   * Slider para desconto mínimo
   * Seletor de ordenação
   * Botão para reset de filtros
-  * Gerencia estados e eventos através de props
-  * Consumo do StoresService para exibir a lista de lojas
+* Gerencia estados e eventos através de props
+* Consumo do StoresService para exibir a lista de lojas
 
 ### `storesService.ts`
 
